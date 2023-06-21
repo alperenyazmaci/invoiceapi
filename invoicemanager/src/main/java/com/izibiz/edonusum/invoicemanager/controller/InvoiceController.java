@@ -22,7 +22,7 @@ public class InvoiceController {
 
     @PostMapping()
     public InvoiceDto createInvoice(@RequestBody InvoiceDto invoiceDto){
-
+        return null;
     }
 
     @PutMapping()
