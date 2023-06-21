@@ -24,6 +24,6 @@ public class InvoiceLineService {
     public void deleteInvoiceLine(InvoiceLine invoiceLine){
         invoiceLineAdapter.deleteInvoiceLine(invoiceLine);
     }
-    public InvoiceLine updateInvoice (InvoiceLine updatedInvoiceLine){return invoiceLineAdapter.updateInvoice(updatedInvoiceLine);}
+    public InvoiceLine updateInvoice (InvoiceLine updatedInvoiceLine){return invoiceLineAdapter.updateInvoiceLine(updatedInvoiceLine);}
 
 }
