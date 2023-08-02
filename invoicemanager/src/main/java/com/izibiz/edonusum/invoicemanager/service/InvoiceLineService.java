@@ -9,13 +9,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class InvoiceLineService {
 
     private final InvoiceLineAdapter invoiceLineAdapter;
 
-    public Optional<InvoiceLine> findInvoiceLineById(Long id){
-        return invoiceLineAdapter.findInvoiceLineById(id);
+    public InvoiceLineService (InvoiceLineAdapter invoiceLineAdapter){
+        this.invoiceLineAdapter = invoiceLineAdapter;
+    }
+
+
+    public InvoiceLine findInvoiceLineById(Long id){
+        return invoiceLineAdapter.findInvoiceLineById(id).get();
     }
     public List<InvoiceLine> listInvoiceLines(){
         return invoiceLineAdapter.listInvoiceLines();

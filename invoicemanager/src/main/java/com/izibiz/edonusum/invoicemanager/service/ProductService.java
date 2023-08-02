@@ -9,12 +9,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class ProductService {
 
     private final ProductAdapter productAdapter;
 
-    public Optional<Product> findProductById(Long id){  return productAdapter.findProductById(id);  }
+    public ProductService (ProductAdapter productAdapter){
+        this.productAdapter = productAdapter;
+    }
+
+    public Product findProductById(Long id){  return productAdapter.findProductById(id).get();  }
     public List<Product> listProducts(){
         return productAdapter.listProducts();
     }

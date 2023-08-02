@@ -2,26 +2,43 @@ package com.izibiz.edonusum.invoicemanager.service;
 
 import com.izibiz.edonusum.invoicemanager.adapter.InvoiceAdapter;
 import com.izibiz.edonusum.invoicemanager.domain.Invoice;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
-@RequiredArgsConstructor
+@Service
+@Data
 public class InvoiceService {
 
     private final InvoiceAdapter invoiceAdapter;
 
-    public Optional<Invoice> findInvoiceById(Long id){return invoiceAdapter.findInvoiceById(id);}
+    public InvoiceService (InvoiceAdapter invoiceAdapter){
+        this.invoiceAdapter = invoiceAdapter;
+    }
+
+    public Invoice findInvoiceById(Long id){return invoiceAdapter.findInvoiceById(id).get();}
     public List<Invoice> listInvoices(){return invoiceAdapter.listInvoices();}
     public Invoice createInvoice(Invoice invoice){
-        return invoiceAdapter.createInvoice(invoice);
+        return null;
     }
-    public void deleteInvoice(Invoice invoice){
-        invoiceAdapter.deleteInvoice(invoice);
+    public boolean deleteInvoice(Invoice invoice){
+        Invoice dbInvoice = findInvoiceById(invoice.getId());
+        if(dbInvoice == null){
+            return false;
+        }else{
+            invoiceAdapter.deleteInvoice(invoice);
+            return true;
+        }
     }
     public Invoice updateInvoice (Invoice updatedInvoice){
-        return invoiceAdapter.updateInvoice(updatedInvoice);
+        Invoice dbInvoice = findInvoiceById(updatedInvoice.getId());
+        if(dbInvoice == null){
+            return null;
+        }else{
+            return invoiceAdapter.updateInvoice(updatedInvoice);
+        }
     }
 
 }

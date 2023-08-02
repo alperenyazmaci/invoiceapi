@@ -11,10 +11,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
-@RequiredArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
+
+    public ProductController(ProductService productService){
+        this.productService = productService;
+    }
 
     private ProductMapper mapper = Mappers.getMapper(ProductMapper.class);
 
@@ -22,7 +25,8 @@ public class ProductController {
     public ProductDto createProduct(@RequestBody ProductDto theProduct){
 
         theProduct.setId(0);
-        return productService.createProduct(theProduct);
+        //return productService.createProduct(theProduct);
+        return null;
     }
 
     @PutMapping()
@@ -32,7 +36,8 @@ public class ProductController {
             System.out.println("Product does not exist.");
             return null;
         }else{
-            return productService.updateProduct(product);
+            //return productService.updateProduct(product);
+            return null;
         }
     }
 
@@ -42,18 +47,20 @@ public class ProductController {
         if(dbProduct == null){
             System.out.println("Product does not exist.");
         }else{
-            productService.deleteProduct(dbProduct);
+            //productService.deleteProduct(dbProduct);
         }
     }
 
     @GetMapping()
     public List<ProductDto> listProducts(){
-        return productService.listProducts();
+        //return productService.listProducts();
+        return null;
     }
 
     @GetMapping("/{productId}")
     public ProductDto findProductById(@PathVariable Long id){
-        return (productService.findProductById(id));
+        //return (productService.findProductById(id));
+        return null;
     }
 
 }

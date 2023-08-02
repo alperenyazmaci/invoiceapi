@@ -4,16 +4,22 @@ import com.izibiz.edonusum.invoicemanager.dao.ProductDao;
 import com.izibiz.edonusum.invoicemanager.domain.Product;
 import com.izibiz.edonusum.invoicemanager.entity.ProductEntity;
 import com.izibiz.edonusum.invoicemanager.mappers.ProductMapper;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
+@Component
 public class ProductAdapter {
 
     private final ProductDao productDao;
+
+    public ProductAdapter(ProductDao productDao) {
+        this.productDao = productDao;
+    }
 
     private ProductMapper mapper = Mappers.getMapper(ProductMapper.class);
 

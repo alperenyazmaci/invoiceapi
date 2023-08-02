@@ -4,17 +4,24 @@ import com.izibiz.edonusum.invoicemanager.dao.CustomerDao;
 import com.izibiz.edonusum.invoicemanager.domain.Customer;
 import com.izibiz.edonusum.invoicemanager.entity.CustomerEntity;
 import com.izibiz.edonusum.invoicemanager.mappers.CustomerMapper;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
+@Component
 public class CustomerAdapter {
 
     private final CustomerDao customerDao;
+
+    public CustomerAdapter(CustomerDao customerDao) {
+        this.customerDao = customerDao;
+    }
+
     private CustomerMapper mapper = Mappers.getMapper(CustomerMapper.class);
 
     public Optional<Customer> findCustomerById(Long id){

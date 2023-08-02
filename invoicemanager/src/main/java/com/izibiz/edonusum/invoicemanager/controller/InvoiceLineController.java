@@ -11,10 +11,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/invoiceLines")
-@RequiredArgsConstructor
 public class InvoiceLineController {
 
     private final InvoiceLineService invoiceLineService;
+
+    public InvoiceLineController(InvoiceLineService invoiceLineService) {
+        this.invoiceLineService = invoiceLineService;
+    }
 
     private InvoiceLineMapper mapper = Mappers.getMapper(InvoiceLineMapper.class);
 
@@ -22,7 +25,8 @@ public class InvoiceLineController {
     public InvoiceLineDto createInvoiceLine(@RequestBody InvoiceLineDto theInvoiceLine){
 
         theInvoiceLine.setId(0);
-        return invoiceLineService.createInvoiceLine(theInvoiceLine);
+        //return invoiceLineService.createInvoiceLine(theInvoiceLine);
+        return null;
     }
 
     @PutMapping()
@@ -32,7 +36,8 @@ public class InvoiceLineController {
             System.out.println("InvoiceLine does not exist.");
             return null;
         }else{
-            return invoiceLineService.updateInvoice(invoice);
+            //return invoiceLineService.updateInvoice(invoice);
+            return null;
         }
     }
 
@@ -42,18 +47,20 @@ public class InvoiceLineController {
         if(dbInvoiceLine == null){
             System.out.println("InvoiceLine does not exist.");
         }else{
-            invoiceLineService.deleteInvoiceLine(dbInvoiceLine);
+            //invoiceLineService.deleteInvoiceLine(dbInvoiceLine);
         }
     }
 
     @GetMapping()
     public List<InvoiceLineDto> listInvoices(){
-        return invoiceLineService.listInvoiceLines();
+        //return invoiceLineService.listInvoiceLines();
+        return null;
     }
 
     @GetMapping("/{invoiceLineId}")
     public InvoiceLineDto findInvoiceLineById(@PathVariable Long id){
-        return (invoiceLineService.findInvoiceLineById(id));
+        //return (invoiceLineService.findInvoiceLineById(id));
+        return null;
     }
 
 }

@@ -4,16 +4,23 @@ import com.izibiz.edonusum.invoicemanager.dao.InvoiceDao;
 import com.izibiz.edonusum.invoicemanager.domain.Invoice;
 import com.izibiz.edonusum.invoicemanager.entity.InvoiceEntity;
 import com.izibiz.edonusum.invoicemanager.mappers.InvoiceMapper;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
+@Component
 public class InvoiceAdapter {
 
     private final InvoiceDao invoiceDao;
+
+    public InvoiceAdapter(InvoiceDao invoiceDao) {
+        this.invoiceDao = invoiceDao;
+    }
+
     private InvoiceMapper mapper = Mappers.getMapper(InvoiceMapper.class);
 
     public Optional<Invoice> findInvoiceById(Long id){
