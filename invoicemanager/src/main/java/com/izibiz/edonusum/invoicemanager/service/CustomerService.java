@@ -7,6 +7,7 @@ import lombok.Data;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Data
@@ -19,7 +20,12 @@ public class CustomerService {
     }
 
     public Customer findCustomerById(Long id){
-        return customerAdapter.findCustomerById(id).get();
+        Optional<Customer> customer = customerAdapter.findCustomerById(id);
+        if(customer.isPresent()){
+            return customer.get();
+        }else{
+            throw new InvalidInfoException("Customer not found.");
+        }
     }
     public List<Customer> listCustomers(){
         return customerAdapter.listCustomers();
@@ -30,11 +36,11 @@ public class CustomerService {
             if (Validations.customerValidation(customer))
                 return customerAdapter.createCustomer(customer);
             else {
-                if (Validations.identifierValidation(customer.getIdentifier()) == false)
+                if (!Validations.identifierValidation(customer.getIdentifier()))
                     throw new InvalidInfoException("Please enter a valid identifier");
-                else if (Validations.phoneNumberValidation(customer.getPhoneNumber()) == false)
+                else if (!Validations.phoneNumberValidation(customer.getPhoneNumber()))
                     throw new InvalidInfoException("Please enter a valid phone number");
-                else if (Validations.emailValidation(customer.getEmail()) == false)
+                else if (!Validations.emailValidation(customer.getEmail()))
                     throw new InvalidInfoException("Please enter a valid email");
                 else if (customer.getName().isEmpty())
                     throw new InvalidInfoException("Please enter a name");
@@ -62,11 +68,11 @@ public class CustomerService {
             if (Validations.customerValidation(updatedCustomer))
                 return customerAdapter.createCustomer(updatedCustomer);
             else {
-                if (Validations.identifierValidation(updatedCustomer.getIdentifier()) == false)
+                if (!Validations.identifierValidation(updatedCustomer.getIdentifier()))
                     throw new InvalidInfoException("Please enter a valid identifier");
-                else if (Validations.phoneNumberValidation(updatedCustomer.getPhoneNumber()) == false)
+                else if (!Validations.phoneNumberValidation(updatedCustomer.getPhoneNumber()))
                     throw new InvalidInfoException("Please enter a valid phone number");
-                else if (Validations.emailValidation(updatedCustomer.getEmail()) == false)
+                else if (!Validations.emailValidation(updatedCustomer.getEmail()))
                     throw new InvalidInfoException("Please enter a valid email");
                 else if (updatedCustomer.getName().isEmpty())
                     throw new InvalidInfoException("Please enter a name");
