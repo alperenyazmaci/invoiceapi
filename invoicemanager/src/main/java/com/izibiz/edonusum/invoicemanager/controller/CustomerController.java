@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -44,6 +45,10 @@ public class CustomerController {
 
     @GetMapping()
     public ResponseEntity<List<CustomerDto>> listCustomers(){
+//        CustomerDto c1 = new CustomerDto(1,"alp","yazmaci", "42778210168", "5374796693", "alperen.yazmaci@gmail.com", "title", "taxoofice");
+//        List<CustomerDto> list = new ArrayList<>();
+//        list.add(c1);
+//        return new ResponseEntity<>(list, HttpStatus.OK);
         return new ResponseEntity<>(mapper.customerListToCustomerDtoList(customerService.listCustomers()), HttpStatus.OK);
     }
 

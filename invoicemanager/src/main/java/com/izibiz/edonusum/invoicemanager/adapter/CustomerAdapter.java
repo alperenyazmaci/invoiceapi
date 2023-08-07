@@ -16,7 +16,7 @@ import java.util.Optional;
 @Component
 public class CustomerAdapter {
 
-    private final CustomerDao customerDao;
+    private CustomerDao customerDao;
 
     public CustomerAdapter(CustomerDao customerDao) {
         this.customerDao = customerDao;

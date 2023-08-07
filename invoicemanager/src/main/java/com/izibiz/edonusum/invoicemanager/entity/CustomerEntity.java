@@ -1,15 +1,9 @@
 package com.izibiz.edonusum.invoicemanager.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="customer")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name="customer", schema="invoice")
 public class CustomerEntity {
 
     @Id

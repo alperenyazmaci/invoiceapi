@@ -4,9 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class CustomerDto {
 
     private long id;
@@ -17,6 +14,22 @@ public class CustomerDto {
     private String email;
     private String title;
     private String taxOffice;
+
+
+    public CustomerDto(long id, String name, String surname, String identifier, String phoneNumber, String email, String title, String taxOffice) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.identifier = identifier;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.title = title;
+        this.taxOffice = taxOffice;
+    }
+
+    public CustomerDto() {
+
+    }
 
     public long getId() {
         return id;
