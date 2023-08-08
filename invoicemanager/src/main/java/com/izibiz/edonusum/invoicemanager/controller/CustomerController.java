@@ -32,12 +32,6 @@ public class CustomerController {
 
     @PutMapping()
     public ResponseEntity<CustomerDto> updateCustomer(@RequestBody CustomerDto customerDto){
-        System.out.println("Customer dto before");
-        System.out.println(customerDto.getName());
-        System.out.println("Customer dto after");
-        System.out.println("Customer before");
-        System.out.println(mapper.customerDtoToCustomer(customerDto).getName());
-        System.out.println("Customer after");
         customerService.updateCustomer(mapper.customerDtoToCustomer(customerDto));
         return new ResponseEntity<>(customerDto, HttpStatus.OK);
     }

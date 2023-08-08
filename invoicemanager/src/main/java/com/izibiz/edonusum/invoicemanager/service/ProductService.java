@@ -17,7 +17,9 @@ public class ProductService {
         this.productAdapter = productAdapter;
     }
 
-    public Product findProductById(Long id){  return productAdapter.findProductById(id).get();  }
+    public Product findProductById(Long id){
+        return productAdapter.findProductById(id).get();
+    }
     public List<Product> listProducts(){
         return productAdapter.listProducts();
     }
