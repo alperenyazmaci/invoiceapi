@@ -24,10 +24,14 @@ public class CustomerAdapter {
 
     private CustomerMapper mapper = Mappers.getMapper(CustomerMapper.class);
 
-    public Optional<Customer> findCustomerById(Long id){
-//        Customer customer = mapper.customerEntityToCustomer(customerDao.findById(id).get());
-//        Optional<Customer> result = Optional.of(customer);
-        return Optional.of(mapper.customerEntityToCustomer(customerDao.findById(id).get()));
+    public Customer findCustomerById(Long id){
+        Optional<CustomerEntity> o = customerDao.findById(id);
+        if(o.isPresent()){
+            return mapper.customerEntityToCustomer(o.get());
+        }else{
+            return null;
+        }
+        //return Optional.of(mapper.customerEntityToCustomer(customerDao.findById(id).get()));
     }
     public List<Customer> listCustomers(){
         return mapper.customerEntityListToCustomerList(customerDao.findAll());

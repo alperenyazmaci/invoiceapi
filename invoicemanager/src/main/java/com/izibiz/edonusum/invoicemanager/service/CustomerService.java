@@ -20,9 +20,9 @@ public class CustomerService {
     }
 
     public Customer findCustomerById(Long id){
-        Optional<Customer> customer = customerAdapter.findCustomerById(id);
-        if(customer.isPresent()){
-            return customer.get();
+        Customer customer = customerAdapter.findCustomerById(id);
+        if(customer != null){
+            return customer;
         }else{
             throw new InvalidInfoException("Customer not found.");
         }
@@ -31,9 +31,9 @@ public class CustomerService {
         return customerAdapter.listCustomers();
     }
     public Customer createCustomer(Customer customer) {
-        Optional<Customer> dbCustomer = customerAdapter.findCustomerById(customer.getId());
-        if (dbCustomer.isPresent()) {
-            throw new InvalidInfoException("Customer already exists, use POST method");
+        Customer dbCustomer = customerAdapter.findCustomerById(customer.getId());
+        if (dbCustomer != null) {
+            throw new InvalidInfoException("Customer already exists, use PUT method");
         }else {
             if (Validations.customerValidation(customer))
                 return customerAdapter.createCustomer(customer);
@@ -53,8 +53,8 @@ public class CustomerService {
         return customer;
     }
     public boolean deleteCustomer(Customer customer){
-        Optional<Customer> dbCustomer = customerAdapter.findCustomerById(customer.getId());
-        if(dbCustomer.isPresent()){
+        Customer dbCustomer = customerAdapter.findCustomerById(customer.getId());
+        if(dbCustomer != null){
             customerAdapter.deleteCustomer(customer);
             return true;
         }else{
@@ -62,10 +62,12 @@ public class CustomerService {
         }
     }
     public Customer updateCustomer(Customer updatedCustomer){
-        Optional<Customer> dbCustomer = customerAdapter.findCustomerById(updatedCustomer.getId());
-        if (dbCustomer.isPresent()){
+        Customer dbCustomer = customerAdapter.findCustomerById(updatedCustomer.getId());
+        System.out.println("Service");
+        System.out.println(dbCustomer);
+        if(dbCustomer != null){
             if (Validations.customerValidation(updatedCustomer))
-                return customerAdapter.createCustomer(updatedCustomer);
+                return customerAdapter.updateCustomer(updatedCustomer);
             else {
                 if (!Validations.identifierValidation(updatedCustomer.getIdentifier()))
                     throw new InvalidInfoException("Please enter a valid identifier");
