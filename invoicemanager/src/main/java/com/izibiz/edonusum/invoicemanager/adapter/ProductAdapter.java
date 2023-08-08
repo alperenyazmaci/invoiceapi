@@ -2,6 +2,7 @@ package com.izibiz.edonusum.invoicemanager.adapter;
 
 import com.izibiz.edonusum.invoicemanager.dao.ProductDao;
 import com.izibiz.edonusum.invoicemanager.domain.Product;
+import com.izibiz.edonusum.invoicemanager.entity.CustomerEntity;
 import com.izibiz.edonusum.invoicemanager.entity.ProductEntity;
 import com.izibiz.edonusum.invoicemanager.mappers.ProductMapper;
 import lombok.AllArgsConstructor;
@@ -23,10 +24,13 @@ public class ProductAdapter {
 
     private ProductMapper mapper = Mappers.getMapper(ProductMapper.class);
 
-    public Optional<Product> findProductById(Long id){
-//        Product product = mapper.productEntityToProduct(productDao.findById(id).get());
-//        Optional<Product> result = Optional.of(product);
-        return Optional.of(mapper.productEntityToProduct(productDao.findById(id).get()));
+    public Product findProductById(Long id){
+        Optional<ProductEntity> o = productDao.findById(id);
+        if(o.isPresent()){
+            return mapper.productEntityToProduct(o.get());
+        }else{
+            return null;
+        }
     }
     public List<Product> listProducts(){
         return mapper.productEntityListToProductList(productDao.findAll());

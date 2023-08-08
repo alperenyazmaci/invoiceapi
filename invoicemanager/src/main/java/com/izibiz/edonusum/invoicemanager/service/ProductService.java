@@ -1,7 +1,9 @@
 package com.izibiz.edonusum.invoicemanager.service;
 
 import com.izibiz.edonusum.invoicemanager.adapter.ProductAdapter;
+import com.izibiz.edonusum.invoicemanager.domain.Customer;
 import com.izibiz.edonusum.invoicemanager.domain.Product;
+import com.izibiz.edonusum.invoicemanager.exception.InvalidInfoException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,19 +20,40 @@ public class ProductService {
     }
 
     public Product findProductById(Long id){
-        return productAdapter.findProductById(id).get();
+        Product product = productAdapter.findProductById(id);
+        if(product != null){
+            return product;
+        }else{
+            throw new InvalidInfoException("Product not found.");
+        }
     }
     public List<Product> listProducts(){
         return productAdapter.listProducts();
     }
     public Product createProduct(Product product){
-        return productAdapter.createProduct(product);
+        Product dbProduct = productAdapter.findProductById(product.getId());
+        if (dbProduct != null) {
+            throw new InvalidInfoException("Product already exists, use PUT method");
+        }else {
+            return productAdapter.createProduct(product);
+        }
     }
-    public void deleteProduct(Product product){
-        productAdapter.deleteProduct(product);
+    public boolean deleteProduct(Product product){
+        Product dbProduct = productAdapter.findProductById(product.getId());
+        if (dbProduct != null) {
+            productAdapter.deleteProduct(product);
+            return true;
+        }else {
+            throw new InvalidInfoException("Product does not exists");
+        }
     }
     public Product updateProduct (Product updatedProduct){
-        return productAdapter.updateProduct(updatedProduct);
+        Product dbProduct = productAdapter.findProductById(updatedProduct.getId());
+        if (dbProduct != null) {
+            return productAdapter.updateProduct(updatedProduct);
+        }else {
+            throw new InvalidInfoException("Product does not exists");
+        }
     }
 
 }
