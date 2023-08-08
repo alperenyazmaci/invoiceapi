@@ -31,8 +31,10 @@ public class CustomerService {
         return customerAdapter.listCustomers();
     }
     public Customer createCustomer(Customer customer) {
-        Customer dbCustomer = findCustomerById(customer.getId());
-        if (dbCustomer == null) {
+        Optional<Customer> dbCustomer = customerAdapter.findCustomerById(customer.getId());
+        if (dbCustomer.isPresent()) {
+            throw new InvalidInfoException("Customer already exists, use POST method");
+        }else {
             if (Validations.customerValidation(customer))
                 return customerAdapter.createCustomer(customer);
             else {
@@ -47,24 +49,21 @@ public class CustomerService {
                 else if (customer.getSurname().isEmpty())
                     throw new InvalidInfoException("Please enter a surname");
             }
-        }else
-            throw new InvalidInfoException("Customer already exists, use POST method");
+        }
         return customer;
     }
     public boolean deleteCustomer(Customer customer){
-        Customer dbCustomer = findCustomerById(customer.getId());
-        if(dbCustomer == null){
-            throw new InvalidInfoException("Customer does not exist");
-        }else{
+        Optional<Customer> dbCustomer = customerAdapter.findCustomerById(customer.getId());
+        if(dbCustomer.isPresent()){
             customerAdapter.deleteCustomer(customer);
             return true;
+        }else{
+            throw new InvalidInfoException("Customer does not exist");
         }
     }
     public Customer updateCustomer(Customer updatedCustomer){
-        Customer dbCustomer = findCustomerById(updatedCustomer.getId());
-        if (dbCustomer == null){
-            throw new InvalidInfoException("Customer does not exist");
-        }else{
+        Optional<Customer> dbCustomer = customerAdapter.findCustomerById(updatedCustomer.getId());
+        if (dbCustomer.isPresent()){
             if (Validations.customerValidation(updatedCustomer))
                 return customerAdapter.createCustomer(updatedCustomer);
             else {
@@ -79,6 +78,8 @@ public class CustomerService {
                 else if (updatedCustomer.getSurname().isEmpty())
                     throw new InvalidInfoException("Please enter a surname");
             }
+        }else{
+            throw new InvalidInfoException("Customer does not exist");
         }
         return updatedCustomer;
     }
