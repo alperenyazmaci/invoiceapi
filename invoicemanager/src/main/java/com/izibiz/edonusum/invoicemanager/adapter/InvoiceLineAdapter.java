@@ -4,10 +4,7 @@ import com.izibiz.edonusum.invoicemanager.dao.InvoiceLineDao;
 import com.izibiz.edonusum.invoicemanager.domain.InvoiceLine;
 import com.izibiz.edonusum.invoicemanager.entity.InvoiceLineEntity;
 import com.izibiz.edonusum.invoicemanager.mappers.InvoiceLineMapper;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -24,10 +21,13 @@ public class InvoiceLineAdapter {
 
     private InvoiceLineMapper mapper = Mappers.getMapper(InvoiceLineMapper.class);
 
-    public Optional<InvoiceLine> findInvoiceLineById(Long id){
-//        InvoiceLine invoiceLine = mapper.invoiceLineEntityToInvoiceLine(invoiceLineDao.findById(id).get());
-//        Optional<InvoiceLine> result = Optional.of(invoiceLine);
-        return Optional.of(mapper.invoiceLineEntityToInvoiceLine(invoiceLineDao.findById(id).get()));
+    public InvoiceLine findInvoiceLineById(Long id){
+        Optional<InvoiceLineEntity> o = invoiceLineDao.findById(id);
+        if(o.isPresent()){
+            return mapper.invoiceLineEntityToInvoiceLine(o.get());
+        }else{
+            return null;
+        }
     }
     public List<InvoiceLine> listInvoiceLines(){
         return mapper.invoiceLineEntityListToInvoiceLineList(invoiceLineDao.findAll());

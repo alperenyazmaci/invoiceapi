@@ -2,6 +2,8 @@ package com.izibiz.edonusum.invoicemanager.service;
 
 import com.izibiz.edonusum.invoicemanager.adapter.InvoiceLineAdapter;
 import com.izibiz.edonusum.invoicemanager.domain.InvoiceLine;
+import com.izibiz.edonusum.invoicemanager.domain.InvoiceLine;
+import com.izibiz.edonusum.invoicemanager.exception.InvalidInfoException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,17 +19,41 @@ public class InvoiceLineService {
         this.invoiceLineAdapter = invoiceLineAdapter;
     }
 
-
     public InvoiceLine findInvoiceLineById(Long id){
-        return invoiceLineAdapter.findInvoiceLineById(id).get();
+        InvoiceLine invoiceLine = invoiceLineAdapter.findInvoiceLineById(id);
+        if(invoiceLine != null){
+            return invoiceLine;
+        }else{
+            throw new InvalidInfoException("InvoiceLine not found.");
+        }
     }
     public List<InvoiceLine> listInvoiceLines(){
         return invoiceLineAdapter.listInvoiceLines();
     }
-    public InvoiceLine createInvoiceLine(InvoiceLine invoiceLine){return invoiceLineAdapter.createInvoiceLine(invoiceLine);}
-    public void deleteInvoiceLine(InvoiceLine invoiceLine){
-        invoiceLineAdapter.deleteInvoiceLine(invoiceLine);
+    public InvoiceLine createInvoiceLine(InvoiceLine invoiceLine){
+        InvoiceLine dbInvoiceLine = invoiceLineAdapter.findInvoiceLineById(invoiceLine.getId());
+        if (dbInvoiceLine != null) {
+            throw new InvalidInfoException("InvoiceLine already exists, use PUT method");
+        }else {
+            return invoiceLineAdapter.createInvoiceLine(invoiceLine);
+        }
     }
-    public InvoiceLine updateInvoice (InvoiceLine updatedInvoiceLine){return invoiceLineAdapter.updateInvoiceLine(updatedInvoiceLine);}
+    public boolean deleteInvoiceLine(InvoiceLine invoiceLine){
+        InvoiceLine dbInvoiceLine = invoiceLineAdapter.findInvoiceLineById(invoiceLine.getId());
+        if (dbInvoiceLine != null) {
+            invoiceLineAdapter.deleteInvoiceLine(invoiceLine);
+            return true;
+        }else {
+            throw new InvalidInfoException("InvoiceLine does not exists");
+        }
+    }
+    public InvoiceLine updateInvoiceLine (InvoiceLine updatedInvoiceLine){
+        InvoiceLine dbInvoiceLine = invoiceLineAdapter.findInvoiceLineById(updatedInvoiceLine.getId());
+        if (dbInvoiceLine != null) {
+            return invoiceLineAdapter.updateInvoiceLine(updatedInvoiceLine);
+        }else {
+            throw new InvalidInfoException("InvoiceLine does not exists");
+        }
+    }
 
 }

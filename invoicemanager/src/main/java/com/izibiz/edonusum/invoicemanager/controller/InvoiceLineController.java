@@ -1,10 +1,12 @@
 package com.izibiz.edonusum.invoicemanager.controller;
 
+import com.izibiz.edonusum.invoicemanager.domain.InvoiceLine;
 import com.izibiz.edonusum.invoicemanager.dto.InvoiceLineDto;
 import com.izibiz.edonusum.invoicemanager.mappers.InvoiceLineMapper;
 import com.izibiz.edonusum.invoicemanager.service.InvoiceLineService;
-import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,45 +24,32 @@ public class InvoiceLineController {
     private InvoiceLineMapper mapper = Mappers.getMapper(InvoiceLineMapper.class);
 
     @PostMapping()
-    public InvoiceLineDto createInvoiceLine(@RequestBody InvoiceLineDto theInvoiceLine){
-
-        theInvoiceLine.setId(0);
-        //return invoiceLineService.createInvoiceLine(theInvoiceLine);
-        return null;
+    public ResponseEntity<InvoiceLineDto> createInvoiceLine(@RequestBody InvoiceLineDto invoiceLineDto){
+        invoiceLineService.createInvoiceLine(mapper.invoiceLineDtoToInvoiceLine(invoiceLineDto));
+        return new ResponseEntity<>(invoiceLineDto, HttpStatus.OK);
     }
 
     @PutMapping()
-    public InvoiceLineDto updateInvoice(InvoiceLineDto invoice){
-        InvoiceLineDto dbInvoice = findInvoiceLineById(invoice.getId());
-        if(dbInvoice == null){
-            System.out.println("InvoiceLine does not exist.");
-            return null;
-        }else{
-            //return invoiceLineService.updateInvoice(invoice);
-            return null;
-        }
+    public ResponseEntity<InvoiceLineDto> updateInvoiceLine(@RequestBody InvoiceLineDto invoiceLineDto){
+        invoiceLineService.updateInvoiceLine(mapper.invoiceLineDtoToInvoiceLine(invoiceLineDto));
+        return new ResponseEntity<>(invoiceLineDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{invoiceLineId}")
-    public void deleteInvoiceLine(@PathVariable Long id){
-        InvoiceLineDto dbInvoiceLine = findInvoiceLineById(id);
-        if(dbInvoiceLine == null){
-            System.out.println("InvoiceLine does not exist.");
-        }else{
-            //invoiceLineService.deleteInvoiceLine(dbInvoiceLine);
-        }
+    public ResponseEntity<String> deleteInvoiceLine(@PathVariable Long invoiceLineId){
+        InvoiceLine invoiceLine = invoiceLineService.findInvoiceLineById(invoiceLineId);
+        invoiceLineService.deleteInvoiceLine(invoiceLine);
+        return new ResponseEntity<>("Invoice Line deleted", HttpStatus.OK);
     }
 
     @GetMapping()
-    public List<InvoiceLineDto> listInvoices(){
-        //return invoiceLineService.listInvoiceLines();
-        return null;
+    public ResponseEntity<List<InvoiceLineDto>> listInvoiceLines(){
+        return new ResponseEntity<>(mapper.invoiceLineListToInvoiceLineDtoList(invoiceLineService.listInvoiceLines()), HttpStatus.OK);
     }
 
     @GetMapping("/{invoiceLineId}")
-    public InvoiceLineDto findInvoiceLineById(@PathVariable Long id){
-        //return (invoiceLineService.findInvoiceLineById(id));
-        return null;
+    public ResponseEntity<InvoiceLineDto> findInvoiceLineById(@PathVariable Long invoiceLineId){
+        return new ResponseEntity<>(mapper.invoiceLineToInvoiceLineDto(invoiceLineService.findInvoiceLineById(invoiceLineId)), HttpStatus.OK);
     }
 
 }

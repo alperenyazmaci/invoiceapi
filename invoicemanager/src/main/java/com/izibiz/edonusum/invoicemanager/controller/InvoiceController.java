@@ -1,11 +1,13 @@
 package com.izibiz.edonusum.invoicemanager.controller;
 
 
+import com.izibiz.edonusum.invoicemanager.domain.Invoice;
 import com.izibiz.edonusum.invoicemanager.dto.InvoiceDto;
 import com.izibiz.edonusum.invoicemanager.mappers.InvoiceMapper;
 import com.izibiz.edonusum.invoicemanager.service.InvoiceService;
-import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,35 +25,32 @@ public class InvoiceController {
     private InvoiceMapper mapper = Mappers.getMapper(InvoiceMapper.class);
 
     @PostMapping()
-    public InvoiceDto createInvoice(@RequestBody InvoiceDto invoiceDto){
-        return null;
+    public ResponseEntity<InvoiceDto> createInvoice(@RequestBody InvoiceDto invoiceDto){
+        invoiceService.createInvoice(mapper.invoiceDtoToInvoice(invoiceDto));
+        return new ResponseEntity<>(invoiceDto, HttpStatus.OK);
     }
 
     @PutMapping()
-    public InvoiceDto updateInvoice(InvoiceDto invoice){
-        return null;
+    public ResponseEntity<InvoiceDto> updateInvoice(@RequestBody InvoiceDto invoiceDto){
+        invoiceService.updateInvoice(mapper.invoiceDtoToInvoice(invoiceDto));
+        return new ResponseEntity<>(invoiceDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{invoiceId}")
-    public void deleteInvoice(@PathVariable Long id){
-        InvoiceDto dbInvoice = findInvoiceById(id);
-        if(dbInvoice == null){
-            System.out.println("Invoice does not exist.");
-        }else{
-            //invoiceService.deleteInvoice(dbInvoice);
-        }
+    public ResponseEntity<String> deleteInvoice(@PathVariable Long invoiceId){
+        Invoice invoice = invoiceService.findInvoiceById(invoiceId);
+        invoiceService.deleteInvoice(invoice);
+        return new ResponseEntity<>("Invoice deleted", HttpStatus.OK);
     }
 
     @GetMapping()
-    public List<InvoiceDto> listInvoices(){
-        //return invoiceService.listInvoices();
-        return null;
+    public ResponseEntity<List<InvoiceDto>> listInvoices(){
+        return new ResponseEntity<>(mapper.invoiceListToInvoiceDtoList(invoiceService.listInvoices()), HttpStatus.OK);
     }
 
     @GetMapping("/{invoiceId}")
-    public InvoiceDto findInvoiceById(@PathVariable Long id){
-        //return (invoiceService.findInvoiceById(id));
-        return null;
+    public ResponseEntity<InvoiceDto> findInvoiceById(@PathVariable Long invoiceId){
+        return new ResponseEntity<>(mapper.invoiceToInvoiceDto(invoiceService.findInvoiceById(invoiceId)), HttpStatus.OK);
     }
 
 }
